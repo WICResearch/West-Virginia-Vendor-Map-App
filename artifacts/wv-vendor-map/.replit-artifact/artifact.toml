@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "West Virginia Vendor Map"
+description = "An interactive mapping dashboard for comparing Dollar General and other vendor locations across West Virginia, with rurality context, filters, and an import path for real vendor data."
+version = "1.0.0"
+id = "artifacts/wv-vendor-map"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24430
+
+[services.development]
+run = "pnpm --filter @workspace/wv-vendor-map run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/wv-vendor-map", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/wv-vendor-map/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24430"
+BASE_PATH = "/"

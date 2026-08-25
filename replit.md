@@ -1,6 +1,6 @@
-# [Project name]
+# West Virginia Vendor Map
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+An interactive research dashboard for comparing vendor access, rurality, and WIC opportunity across West Virginia.
 
 ## Run & Operate
 
@@ -22,23 +22,30 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/wv-vendor-map/src/App.tsx` — map dashboard, representative data, browser import/export, filtering, and selection state
+- `artifacts/wv-vendor-map/src/index.css` — application theme and responsive visual system
+- `artifacts/wv-vendor-map` — runnable web artifact
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- The first version is frontend-only so a researcher can load and explore it before connecting a data service.
+- Vendor data is normalized in-browser from CSV or JSON to support common spreadsheet exports without requiring a fixed source schema.
+- The map uses a deliberately simplified West Virginia geography to keep the statewide comparison legible while remaining dependency-light.
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+- Shows representative vendor locations across West Virginia with clickable map points.
+- Compares rurality, vendor type, WIC authorization status, and access distance.
+- Supports search and filters, a selected-location detail view, CSV/JSON import, and JSON export.
+- Frames the map as an access and WIC opportunity analysis rather than a generic store locator.
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+No standing preferences recorded.
 
 ## Gotchas
 
-_Populate as you build — sharp edges, "always run X before Y" rules._
+- Imported records need either latitude/longitude or recognizable West Virginia county/place fields; invalid rows are skipped with a visible import notice.
 
 ## Pointers
 
