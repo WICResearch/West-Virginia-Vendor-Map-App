@@ -26,6 +26,12 @@ import {
 } from 'lucide-react';
 import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import wvCountyMap from '@assets/image_1787709763540.png';
+import wicLogo from '@assets/wic_logo__1787710051410.png';
+import dohLogo from '@assets/New_Dept_of_Health_Logo_horz_RGB_1787710060679.jpg';
+import wicEmbellishmentOne from '@assets/WIC_Embellishments_01_1787710072092.png';
+import wicEmbellishmentTwo from '@assets/WIC_Embellishments_02_1787710074118.png';
+import wicColorLogo from '@assets/WIC-Color_1787710077940.jpg';
+import wicColorLogoAlt from '@assets/WIC-Color_1787710081535.jpg';
 
 type VendorType = 'Dollar General' | 'Grocery' | 'Pharmacy' | 'Farmers market';
 type Rurality = 'Rural' | 'Micropolitan' | 'Metro';
@@ -198,6 +204,10 @@ function Dashboard() {
             </nav>
           </div>
           <div className="mt-auto px-6 pb-6">
+             <div className="mb-5 border-t border-sidebar-border pt-5">
+               <p className="font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/40">Program partner</p>
+               <img src={wicLogo} alt="West Virginia WIC — Nourishing the Future" className="mt-3 w-[174px] rounded-sm bg-white object-contain p-1" />
+             </div>
             <div className="border-t border-sidebar-border pt-5">
               <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/45">
                 <span>Source status</span>
@@ -219,6 +229,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+               <img src={dohLogo} alt="West Virginia Department of Health" className="mr-2 hidden h-8 w-auto max-w-[170px] object-contain xl:block" />
               <input ref={fileInputRef} type="file" accept=".csv,.json,application/json,text/csv" onChange={handleFile} className="hidden" data-testid="input-import-file" />
               <button type="button" data-testid="button-import-vendors" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-[12px] font-semibold text-foreground transition-colors hover:border-primary hover:bg-muted"><Upload size={15} /> <span className="hidden sm:inline">Import list</span></button>
               <button type="button" data-testid="button-export-vendors" onClick={() => { const blob = new Blob([JSON.stringify(vendors, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'wv-vendor-map.json'; anchor.click(); URL.revokeObjectURL(url); }} className="flex items-center gap-2 rounded-sm bg-primary px-3 py-2 text-[12px] font-semibold text-primary-foreground transition-transform hover:-translate-y-px"><ArrowDownToLine size={15} /> <span className="hidden sm:inline">Export view</span></button>
@@ -285,24 +296,26 @@ function Dashboard() {
             </section>
 
             <section className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,.8fr)]">
-              <div className="border border-border bg-card p-5 md:p-6">
+               <div className="relative overflow-hidden border border-border bg-card p-5 md:p-6">
+                 <img src={wicEmbellishmentOne} alt="" aria-hidden="true" className="pointer-events-none absolute -right-10 -top-4 w-[230px] opacity-[.11]" />
+                 <img src={wicEmbellishmentTwo} alt="" aria-hidden="true" className="pointer-events-none absolute -bottom-14 right-24 w-[190px] opacity-[.07]" />
                 <div className="flex items-start justify-between gap-4">
-                  <div><p className="font-mono text-[9px] uppercase tracking-[.18em] text-accent-foreground/70">Reading the map</p><h2 className="mt-2 max-w-[550px] font-serif text-[24px] font-bold leading-[1.1] tracking-tight md:text-[29px]">Access is a distance problem before it is a store problem.</h2></div>
+                   <div className="relative z-[1]"><p className="font-mono text-[9px] uppercase tracking-[.18em] text-accent-foreground/70">Reading the map</p><h2 className="mt-2 max-w-[550px] font-serif text-[24px] font-bold leading-[1.1] tracking-tight md:text-[29px]">Access is a distance problem before it is a store problem.</h2></div>
                   <CircleHelp size={19} className="shrink-0 text-muted-foreground" />
                 </div>
-                <p className="mt-4 max-w-[720px] text-[13px] leading-relaxed text-muted-foreground">In rural West Virginia, a vendor can be physically present and still be functionally out of reach. This working map layers vendor type, rurality, and WIC authorization to surface where a familiar retail footprint may represent a practical partnership opportunity.</p>
-                <div className="mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-3">
+                 <p className="relative z-[1] mt-4 max-w-[720px] text-[13px] leading-relaxed text-muted-foreground">In rural West Virginia, a vendor can be physically present and still be functionally out of reach. This working map layers vendor type, rurality, and WIC authorization to surface where a familiar retail footprint may represent a practical partnership opportunity.</p>
+                 <div className="relative z-[1] mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-3">
                   <StoryStat value="11" label="rural counties represented" detail="in this working set" />
                   <StoryStat value="18.4 mi" label="longest observed trip" detail="to a mapped vendor" />
                   <StoryStat value="5" label="locations to validate" detail="before outreach" />
                 </div>
               </div>
-              <div className="border border-border bg-[#e8e5d5] p-5 md:p-6">
-                <div className="flex items-center justify-between"><p className="font-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground">Signal to watch</p><BarChart3 size={17} className="text-primary" /></div>
+               <div className="relative overflow-hidden border border-border bg-[#e8e5d5] p-5 md:p-6">
+                 <div className="flex items-center justify-between"><div className="flex items-center gap-2"><img src={wicColorLogo} alt="WIC" className="h-7 w-7 rounded-full object-cover" /><p className="font-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground">Signal to watch</p></div><BarChart3 size={17} className="text-primary" /></div>
                 <p className="mt-6 font-serif text-[39px] font-bold leading-none text-primary">4 in 10</p>
                 <p className="mt-2 text-[13px] font-semibold text-foreground">mapped sites sit in a WIC opportunity window</p>
                 <div className="mt-5 h-2 overflow-hidden bg-background/70"><div className="h-full bg-accent transition-all duration-500" style={{ width: `${(gapCount / Math.max(vendors.length, 1)) * 100}%` }} /></div>
-                <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">Not authorized or authorization status not yet confirmed. Treat this as a lead list, not a compliance finding.</p>
+                 <div className="mt-3 flex items-end justify-between gap-3"><p className="text-[11px] leading-relaxed text-muted-foreground">Not authorized or authorization status not yet confirmed. Treat this as a lead list, not a compliance finding.</p><img src={wicColorLogoAlt} alt="WIC" className="h-8 w-8 shrink-0 rounded-full object-cover" /></div>
               </div>
             </section>
 
