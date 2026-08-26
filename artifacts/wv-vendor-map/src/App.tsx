@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { PilotAnalysis } from '@/components/pilot-analysis';
 import {
+import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter'; 
   Activity,
   ArrowDownToLine,
   BarChart3,
@@ -84,7 +85,10 @@ function AppShell() {
 }
 
 function Dashboard() {
-  const [vendors, setVendors] = useState<Vendor[]>(representativeVendors);
+const [vendors, setVendors] = useState<Vendor[]>([
+  ...representativeVendors,
+  ...(dgLocations as Vendor[])
+]);
   const [selectedId, setSelectedId] = useState('dg-mingo');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'All' | VendorType>('All');
