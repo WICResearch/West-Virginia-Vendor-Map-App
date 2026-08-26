@@ -84,11 +84,7 @@ function AppShell() {
   return <Dashboard />;
 }
 
-function Dashboard() {
-const [vendors, setVendors] = useState<Vendor[]>([
-  ...representativeVendors,
-  ...(dgLocations as Vendor[])
-]);
+const [vendors, setVendors] = useState<Vendor[]>(dgLocations as Vendor[]);
   const [selectedId, setSelectedId] = useState('dg-mingo');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'All' | VendorType>('All');
