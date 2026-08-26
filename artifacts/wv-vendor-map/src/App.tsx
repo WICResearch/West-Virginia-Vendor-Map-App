@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { PilotAnalysis } from '@/components/pilot-analysis';
 import {
   Activity,
   ArrowDownToLine,
@@ -95,6 +96,7 @@ function Dashboard() {
   const [importNotice, setImportNotice] = useState('');
   const [mapZoom, setMapZoom] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [, setLocation] = useLocation();
 
   const filteredVendors = useMemo(() => vendors.filter((vendor) => {
     const matchesSearch = `${vendor.name} ${vendor.city} ${vendor.county}`.toLowerCase().includes(search.toLowerCase());
@@ -186,6 +188,7 @@ function Dashboard() {
             <nav className="space-y-1">
               {[
                 { label: 'Map overview', icon: MapIcon },
+                { label: 'Pilot analysis', icon: BarChart3 },
                 { label: 'Opportunity gaps', icon: Activity },
                 { label: 'Data & methods', icon: Database },
               ].map(({ label, icon: Icon }) => (
@@ -193,7 +196,7 @@ function Dashboard() {
                   type="button"
                   key={label}
                   data-testid={`button-nav-${label.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => { setActiveNav(label); setMobileNav(false); }}
+                  onClick={() => { setMobileNav(false); if (label === 'Pilot analysis') { setLocation('/pilot-analysis'); return; } setActiveNav(label); }}
                   className={`flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-[13px] transition-colors ${activeNav === label ? 'bg-sidebar-accent text-sidebar-primary' : 'text-sidebar-foreground/65 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground'}`}
                 >
                   <Icon size={16} strokeWidth={1.8} />
@@ -377,7 +380,7 @@ function WicPill({ status }: { status: WicStatus }) { const color = status === '
 function FilterSelect({ label, value, options, onChange, testId }: { label: string; value: string; options: readonly string[]; onChange: (value: string) => void; testId: string }) { return <label className="relative flex h-8 items-center gap-1.5 rounded-sm border border-input bg-background px-2 text-[10px] font-semibold"><span className="text-muted-foreground">{label}</span><select value={value} data-testid={testId} onChange={(event) => onChange(event.target.value)} className="max-w-[100px] appearance-none bg-transparent pr-3 text-[10px] font-semibold outline-none"><>{options.map((option) => <option value={option} key={option}>{option}</option>)}</></select><ChevronDown size={11} className="pointer-events-none absolute right-1 text-muted-foreground" /></label>; }
 
 function Router() {
-  return <ErrorBoundary resetKey={useLocation()[0]}><Switch><Route path="/" component={AppShell} /><Route component={() => <div className="p-12 font-serif text-xl">Page not found</div>} /></Switch></ErrorBoundary>;
+  return <ErrorBoundary resetKey={useLocation()[0]}><Switch><Route path="/" component={AppShell} /><Route path="/pilot-analysis" component={PilotAnalysis} /><Route component={() => <div className="p-12 font-serif text-xl">Page not found</div>} /></Switch></ErrorBoundary>;
 }
 
 const queryClient = new QueryClient();
