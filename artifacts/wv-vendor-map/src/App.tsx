@@ -25,6 +25,7 @@ import {
   X,
 } from 'lucide-react';
 import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
+import wvCountyMap from '@assets/image_1787709763540.png';
 
 type VendorType = 'Dollar General' | 'Grocery' | 'Pharmacy' | 'Farmers market';
 type Rurality = 'Rural' | 'Micropolitan' | 'Metro';
@@ -61,9 +62,15 @@ const representativeVendors: Vendor[] = [
   { id: 'market-tucker', name: 'Mountain Harvest Market', type: 'Farmers market', county: 'Tucker', city: 'Davis', rurality: 'Rural', wic: 'Unknown', mapX: 434, mapY: 155, lat: 39.133, lng: -79.467, distance: '31.0 mi', note: 'Seasonal market in a high-tourism rural county.' },
 ];
 
-const countyShapes = [
-  'M85 100 L134 77 L166 95 L199 71 L225 87 L260 69 L293 91 L322 78 L351 99 L383 79 L414 95 L448 70 L480 92 L524 67 L557 92 L548 120 L567 138 L542 163 L550 194 L516 210 L532 239 L500 253 L509 286 L475 301 L446 285 L418 306 L385 292 L356 311 L323 289 L293 307 L262 289 L238 319 L211 298 L185 319 L156 299 L124 312 L113 280 L85 268 L99 234 L73 211 L91 179 L70 146 L98 128 Z',
-];
+function imageMapPoint(vendor: Vendor) {
+  // The source map has a little white margin around the county artwork.
+  // Use the record's geographic coordinates so imported points land in the
+  // same place as the representative locations.
+  return {
+    x: 53 + ((vendor.lng + 82.6) * 511) / 4.9,
+    y: 392 - ((vendor.lat - 37) * 378) / 3.7,
+  };
+}
 
 function AppShell() {
   return <Dashboard />;
@@ -233,13 +240,13 @@ function Dashboard() {
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3.5 md:px-5">
                   <div>
                     <h2 className="font-serif text-[17px] font-bold">Vendor geography</h2>
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">Point locations shown against a simplified county context</p>
+                     <p className="mt-0.5 text-[11px] text-muted-foreground">Point locations shown against a county-level West Virginia map</p>
                   </div>
                   <div className="flex items-center gap-1 rounded-sm border border-border bg-muted/50 p-1">
                     {(['All vendors', 'WIC gap'] as const).map((layer) => <button type="button" key={layer} data-testid={`button-layer-${layer.toLowerCase().replace(/\s+/g, '-')}`} onClick={() => setMapLayer(layer)} className={`rounded-sm px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${mapLayer === layer ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>{layer}</button>)}
                   </div>
                 </div>
-                <div className="relative h-[390px] overflow-hidden bg-[#e5e5d4] map-grid map-grain sm:h-[470px]">
+                   <div className="relative h-[390px] overflow-hidden bg-[#f8f8f4] sm:h-[470px]">
                   <div className="absolute left-4 top-4 z-10 rounded-sm border border-border/70 bg-card/90 px-3 py-2 backdrop-blur">
                     <p className="font-mono text-[9px] uppercase tracking-[.13em] text-muted-foreground">West Virginia</p>
                     <p className="mt-1 font-serif text-[18px] font-bold tracking-tight">The Mountain State</p>
@@ -255,22 +262,16 @@ function Dashboard() {
                     <LegendDot color="#df7660" label="Pharmacy" />
                     <LegendDot color="#8a9c4e" label="Market" />
                   </div>
-                  <svg viewBox="0 0 620 410" className="h-full w-full transition-transform duration-500" style={{ transform: `scale(${mapZoom})` }} role="img" aria-label="Simplified map of vendor locations in West Virginia">
-                    <defs><filter id="mapShadow"><feDropShadow dx="0" dy="3" stdDeviation="4" floodOpacity=".18" /></filter></defs>
-                    <path d={countyShapes[0]} fill="#cfd4bb" stroke="#84927b" strokeWidth="2" filter="url(#mapShadow)" />
-                    <path d="M112 128 L174 110 L199 180 L161 226 L103 207 M199 86 L229 146 L285 120 L275 196 L238 246 M285 120 L350 110 L338 168 L390 198 L354 250 L293 245 M350 110 L414 100 L407 167 L466 161 L454 221 L500 253 M414 100 L465 83 L490 122 L516 135 M238 246 L211 297 M354 250 L385 291" fill="none" stroke="#aab39a" strokeWidth="1.25" strokeDasharray="3 3" opacity=".8" />
-                    <path d="M90 145 C190 168 236 104 300 160 S423 188 532 105 M103 270 C181 224 257 272 326 224 S448 213 514 279" fill="none" stroke="#f3f0e3" strokeWidth="2" opacity=".9" />
-                    <text x="275" y="76" fill="#71806d" fontSize="10" fontFamily="Space Mono" letterSpacing="2">MONONGALIA</text>
-                    <text x="215" y="205" fill="#71806d" fontSize="10" fontFamily="Space Mono" letterSpacing="2">KANAWHA</text>
-                    <text x="120" y="278" fill="#71806d" fontSize="10" fontFamily="Space Mono" letterSpacing="2">RALEIGH</text>
-                    <text x="414" y="270" fill="#71806d" fontSize="10" fontFamily="Space Mono" letterSpacing="2">PENDLETON</text>
+                   <svg viewBox="0 0 620 410" className="h-full w-full transition-transform duration-500" style={{ transform: `scale(${mapZoom})` }} role="img" aria-label="West Virginia county map with vendor locations">
+                     <image href={wvCountyMap} x="37" y="0" width="546" height="410" preserveAspectRatio="none" />
                     {filteredVendors.map((vendor) => {
                       const active = selected?.id === vendor.id;
                       const color = vendor.type === 'Dollar General' ? '#d8a629' : vendor.type === 'Grocery' ? '#2c615d' : vendor.type === 'Pharmacy' ? '#df7660' : '#84943f';
-                      return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
-                        {active && <circle cx={vendor.mapX} cy={vendor.mapY} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
-                        <circle cx={vendor.mapX} cy={vendor.mapY} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
-                        {active && <circle cx={vendor.mapX} cy={vendor.mapY} r="2" fill="#f7f2e6" />}
+                       const point = imageMapPoint(vendor);
+                       return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
+                         {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
+                         <circle cx={point.x} cy={point.y} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
+                         {active && <circle cx={point.x} cy={point.y} r="2" fill="#f7f2e6" />}
                       </g>;
                     })}
                   </svg>
