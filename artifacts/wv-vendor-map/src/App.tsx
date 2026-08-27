@@ -5,7 +5,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { PilotAnalysis } from '@/components/pilot-analysis';
 import {
-import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter'; 
   Activity,
   ArrowDownToLine,
   BarChart3,
@@ -26,7 +25,9 @@ import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
   Upload,
   X,
 } from 'lucide-react';
+
 import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
+import dgLocations from './wv-dg-map-locations.json';
 import wvCountyMap from '@assets/image_1787709763540.png';
 import wicLogo from '@assets/wic_logo__1787710051410.png';
 import dohLogo from '@assets/New_Dept_of_Health_Logo_horz_RGB_1787710060679.jpg';
@@ -84,7 +85,8 @@ function AppShell() {
   return <Dashboard />;
 }
 
-const [vendors, setVendors] = useState<Vendor[]>(dgLocations as Vendor[]);
+function Dashboard() {
+  const [vendors, setVendors] = useState<Vendor[]>(dgLocations as Vendor[]);
   const [selectedId, setSelectedId] = useState('dg-mingo');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'All' | VendorType>('All');
