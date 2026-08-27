@@ -348,7 +348,15 @@ setWicFilter('All');
                     {filteredVendors.map((vendor) => {
                      const active = selected?.id === vendor.id;
                      const color = vendor.type === 'Dollar General' ? '#d8a629' : '#2c615d';   
-                       const point = imageMapPoint(vendor);
+                       const basePoint = imageMapPoint(vendor);
+
+const point =
+  mapView === 'combined'
+    ? {
+        x: basePoint.x,
+        y: basePoint.y + 22
+      }
+    : basePoint;
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
                          {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
                          <circle cx={point.x} cy={point.y} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
