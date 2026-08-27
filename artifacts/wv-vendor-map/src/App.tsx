@@ -28,6 +28,7 @@ import {
 
 import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import dgLocations from './wv-dg-map-locations.json';
+import wicLocations from './wv-wic-vendor-locations-confirmed.json';
 import wvCountyMap from '@assets/image_1787709763540.png';
 import wicLogo from '@assets/wic_logo__1787710051410.png';
 import dohLogo from '@assets/New_Dept_of_Health_Logo_horz_RGB_1787710060679.jpg';
@@ -36,8 +37,8 @@ import wicEmbellishmentTwo from '@assets/WIC_Embellishments_02_1787710074118.png
 import wicColorLogo from '@assets/WIC-Color_1787710077940.jpg';
 import wicColorLogoAlt from '@assets/WIC-Color_1787710081535.jpg';
 
-type VendorType = 'Dollar General' | 'Grocery' | 'Pharmacy' | 'Farmers market';
-type Rurality = 'Rural' | 'Micropolitan' | 'Metro';
+type VendorType = 'Dollar General' | 'WIC Vendor';
+type Rurality = 'Rural' | 'Micropolitan' | 'Metro' | 'Unknown';
 type WicStatus = 'Active' | 'Not authorized' | 'Unknown';
 
 type Vendor = {
@@ -56,20 +57,6 @@ type Vendor = {
   note: string;
 };
 
-const representativeVendors: Vendor[] = [
-  { id: 'dg-mingo', name: 'Dollar General — Williamson', type: 'Dollar General', county: 'Mingo', city: 'Williamson', rurality: 'Rural', wic: 'Not authorized', mapX: 101, mapY: 305, lat: 37.674, lng: -82.278, distance: '18.4 mi', note: 'Only mapped food retailer within a 15-mile drive.' },
-  { id: 'dg-mccdowell', name: 'Dollar General — Welch', type: 'Dollar General', county: 'McDowell', city: 'Welch', rurality: 'Rural', wic: 'Not authorized', mapX: 154, mapY: 272, lat: 37.432, lng: -81.584, distance: '22.1 mi', note: 'High-need service area; nearest full grocery is outside county.' },
-  { id: 'dg-raleigh', name: 'Dollar General — Beckley', type: 'Dollar General', county: 'Raleigh', city: 'Beckley', rurality: 'Micropolitan', wic: 'Unknown', mapX: 213, mapY: 258, lat: 37.778, lng: -81.188, distance: '9.2 mi', note: 'Potential partner location near I-64 corridor.' },
-  { id: 'dg-kanawha', name: 'Dollar General — Charleston', type: 'Dollar General', county: 'Kanawha', city: 'Charleston', rurality: 'Metro', wic: 'Not authorized', mapX: 278, mapY: 194, lat: 38.350, lng: -81.633, distance: '3.7 mi', note: 'Urban comparison site for statewide baseline.' },
-  { id: 'dg-upshur', name: 'Dollar General — Buckhannon', type: 'Dollar General', county: 'Upshur', city: 'Buckhannon', rurality: 'Micropolitan', wic: 'Active', mapX: 341, mapY: 166, lat: 39.00, lng: -80.232, distance: '6.1 mi', note: 'Active WIC vendor in a small-city trade area.' },
-  { id: 'dg-monongalia', name: 'Dollar General — Morgantown', type: 'Dollar General', county: 'Monongalia', city: 'Morgantown', rurality: 'Metro', wic: 'Unknown', mapX: 397, mapY: 112, lat: 39.629, lng: -79.956, distance: '2.6 mi', note: 'University-adjacent location; dense comparison market.' },
-  { id: 'dg-berkeley', name: 'Dollar General — Martinsburg', type: 'Dollar General', county: 'Berkeley', city: 'Martinsburg', rurality: 'Metro', wic: 'Not authorized', mapX: 520, mapY: 91, lat: 39.456, lng: -77.964, distance: '4.9 mi', note: 'Eastern panhandle comparison; fast-growing population.' },
-  { id: 'grocery-harrison', name: 'Save-A-Lot — Clarksburg', type: 'Grocery', county: 'Harrison', city: 'Clarksburg', rurality: 'Micropolitan', wic: 'Active', mapX: 316, mapY: 135, lat: 39.281, lng: -80.344, distance: '7.8 mi', note: 'Full-service grocery and active WIC authorization.' },
-  { id: 'grocery-greenbrier', name: 'Kroger — Lewisburg', type: 'Grocery', county: 'Greenbrier', city: 'Lewisburg', rurality: 'Rural', wic: 'Active', mapX: 242, mapY: 299, lat: 37.801, lng: -80.445, distance: '11.3 mi', note: 'Regional grocery anchor serving surrounding rural communities.' },
-  { id: 'pharmacy-preston', name: 'Preston Family Pharmacy', type: 'Pharmacy', county: 'Preston', city: 'Kingwood', rurality: 'Rural', wic: 'Unknown', mapX: 407, mapY: 174, lat: 39.472, lng: -79.684, distance: '14.8 mi', note: 'Community pharmacy; food inventory not verified.' },
-  { id: 'market-monroe', name: 'Monroe Farmers Market', type: 'Farmers market', county: 'Monroe', city: 'Union', rurality: 'Rural', wic: 'Not authorized', mapX: 205, mapY: 329, lat: 37.589, lng: -80.543, distance: '26.4 mi', note: 'Seasonal outlet; WIC redemption opportunity to assess.' },
-  { id: 'market-tucker', name: 'Mountain Harvest Market', type: 'Farmers market', county: 'Tucker', city: 'Davis', rurality: 'Rural', wic: 'Unknown', mapX: 434, mapY: 155, lat: 39.133, lng: -79.467, distance: '31.0 mi', note: 'Seasonal market in a high-tourism rural county.' },
-];
 
 function imageMapPoint(vendor: Vendor) {
   // The source map has a little white margin around the county artwork.
@@ -86,13 +73,30 @@ function AppShell() {
 }
 
 function Dashboard() {
-  const [vendors, setVendors] = useState<Vendor[]>(dgLocations as Vendor[]);
+ const [mapView, setMapView] = useState<'wic' | 'dg'>('wic');
+
+const [vendors, setVendors] = useState<Vendor[]>(
+  mapView === 'wic' ? (wicLocations as Vendor[]) : (dgLocations as Vendor[])
+);
+  function switchMapView(view: 'wic' | 'dg') {
+  setMapView(view);
+  setVendors(
+    view === 'wic'
+      ? (wicLocations as Vendor[])
+      : (dgLocations as Vendor[])
+  );
+  setSelectedId('');
+  setSearch('');
+setTypeFilter('All');
+setRuralFilter('All');
+setWicFilter('All');  
+}
   const [selectedId, setSelectedId] = useState('dg-mingo');
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<'All' | VendorType>('All');
   const [ruralFilter, setRuralFilter] = useState<'All' | Rurality>('All');
   const [wicFilter, setWicFilter] = useState<'All' | WicStatus>('All');
-  const [mapLayer, setMapLayer] = useState<'All vendors' | 'WIC gap'>('All vendors');
+
   const [activeNav, setActiveNav] = useState('Map overview');
   const [mobileNav, setMobileNav] = useState(false);
   const [importNotice, setImportNotice] = useState('');
@@ -105,9 +109,8 @@ function Dashboard() {
     const matchesType = typeFilter === 'All' || vendor.type === typeFilter;
     const matchesRural = ruralFilter === 'All' || vendor.rurality === ruralFilter;
     const matchesWic = wicFilter === 'All' || vendor.wic === wicFilter;
-    const matchesLayer = mapLayer === 'All vendors' || vendor.wic !== 'Active';
-    return matchesSearch && matchesType && matchesRural && matchesWic && matchesLayer;
-  }), [vendors, search, typeFilter, ruralFilter, wicFilter, mapLayer]);
+    return matchesSearch && matchesType && matchesRural && matchesWic;
+  }), [vendors, search, typeFilter, ruralFilter, wicFilter]);
 
   const selected = vendors.find((vendor) => vendor.id === selectedId) ?? filteredVendors[0] ?? vendors[0];
   const ruralCount = vendors.filter((vendor) => vendor.rurality === 'Rural').length;
@@ -119,7 +122,6 @@ function Dashboard() {
     setTypeFilter('All');
     setRuralFilter('All');
     setWicFilter('All');
-    setMapLayer('All vendors');
   }
 
   function parseImported(raw: string, fileName: string) {
@@ -258,9 +260,31 @@ function Dashboard() {
                     <h2 className="font-serif text-[17px] font-bold">Vendor geography</h2>
                      <p className="mt-0.5 text-[11px] text-muted-foreground">Point locations shown against a county-level West Virginia map</p>
                   </div>
-                  <div className="flex items-center gap-1 rounded-sm border border-border bg-muted/50 p-1">
-                    {(['All vendors', 'WIC gap'] as const).map((layer) => <button type="button" key={layer} data-testid={`button-layer-${layer.toLowerCase().replace(/\s+/g, '-')}`} onClick={() => setMapLayer(layer)} className={`rounded-sm px-2.5 py-1.5 text-[10px] font-semibold transition-colors ${mapLayer === layer ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}>{layer}</button>)}
-                  </div>
+                 <div className="flex items-center gap-1 rounded-sm border border-border bg-muted/50 p-1">
+  <button
+    type="button"
+    onClick={() => switchMapView('wic')}
+    className={`rounded-sm px-3 py-1.5 text-[10px] font-semibold transition-colors ${
+      mapView === 'wic'
+        ? 'bg-card text-foreground shadow-sm'
+        : 'text-muted-foreground hover:text-foreground'
+    }`}
+  >
+    WIC Vendors
+  </button>
+
+  <button
+    type="button"
+    onClick={() => switchMapView('dg')}
+    className={`rounded-sm px-3 py-1.5 text-[10px] font-semibold transition-colors ${
+      mapView === 'dg'
+        ? 'bg-card text-foreground shadow-sm'
+        : 'text-muted-foreground hover:text-foreground'
+    }`}
+  >
+    Dollar General
+  </button>
+</div>
                 </div>
                    <div className="relative h-[390px] overflow-hidden bg-[#f8f8f4] sm:h-[470px]">
                   <div className="absolute left-4 top-4 z-10 rounded-sm border border-border/70 bg-card/90 px-3 py-2 backdrop-blur">
@@ -273,16 +297,14 @@ function Dashboard() {
                     <button type="button" aria-label="Reset map zoom" data-testid="button-map-reset" onClick={() => setMapZoom(1)} className="p-2.5 text-muted-foreground hover:bg-muted hover:text-foreground"><LocateFixed size={16} /></button>
                   </div>
                   <div className="absolute bottom-4 left-4 z-10 flex flex-wrap gap-x-3 gap-y-1.5 rounded-sm border border-border/70 bg-card/90 px-3 py-2 font-mono text-[9px] uppercase tracking-[.08em] backdrop-blur">
-                    <LegendDot color="#e0ad2d" label="Dollar General" />
-                    <LegendDot color="#2c615d" label="Grocery" />
-                    <LegendDot color="#df7660" label="Pharmacy" />
-                    <LegendDot color="#8a9c4e" label="Market" />
+                   <LegendDot color="#2c615d" label="WIC Vendor" />
+<LegendDot color="#e0ad2d" label="Dollar General" /> 
                   </div>
                    <svg viewBox="0 0 620 410" className="h-full w-full transition-transform duration-500" style={{ transform: `scale(${mapZoom})` }} role="img" aria-label="West Virginia county map with vendor locations">
                      <image href={wvCountyMap} x="37" y="0" width="546" height="410" preserveAspectRatio="none" />
                     {filteredVendors.map((vendor) => {
-                      const active = selected?.id === vendor.id;
-                      const color = vendor.type === 'Dollar General' ? '#d8a629' : vendor.type === 'Grocery' ? '#2c615d' : vendor.type === 'Pharmacy' ? '#df7660' : '#84943f';
+                     const active = selected?.id === vendor.id;
+                     const color = vendor.type === 'Dollar General' ? '#d8a629' : '#2c615d';   
                        const point = imageMapPoint(vendor);
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
                          {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
@@ -293,7 +315,8 @@ function Dashboard() {
                   </svg>
                 </div>
                 <div className="flex items-center justify-between border-t border-border bg-muted/30 px-4 py-2.5 font-mono text-[9px] uppercase tracking-[.1em] text-muted-foreground md:px-5">
-                  <span>{filteredVendors.length} visible locations</span><span>Data view · {mapLayer}</span>
+                  <span>{filteredVendors.length} visible locations</span>
+<span>{mapView === 'wic' ? 'Current WIC Vendors' : 'Dollar General Locations'}</span>
                 </div>
               </div>
 
@@ -329,10 +352,25 @@ function Dashboard() {
                 <div><h2 className="font-serif text-[18px] font-bold">Location index</h2><p className="mt-1 text-[11px] text-muted-foreground">Select a row to inspect the field context.</p></div>
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative"><Search size={14} className="absolute left-2.5 top-2.5 text-muted-foreground" /><input type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search county or city" data-testid="input-search-vendors" className="h-8 w-full rounded-sm border border-input bg-background pl-8 pr-3 text-[11px] outline-none transition-colors placeholder:text-muted-foreground focus:border-primary sm:w-[180px]" /></div>
-                  <FilterSelect label="Type" value={typeFilter} options={['All', 'Dollar General', 'Grocery', 'Pharmacy', 'Farmers market'] as const} onChange={(value) => setTypeFilter(value as typeof typeFilter)} testId="select-vendor-type" />
+<FilterSelect
+  label="Type"
+  value={typeFilter}
+  options={['All', 'Dollar General', 'WIC Vendor'] as const}
+  onChange={(value) => setTypeFilter(value as typeof typeFilter)}
+  testId="select-vendor-type"
+/>
                   <FilterSelect label="Rurality" value={ruralFilter} options={['All', 'Rural', 'Micropolitan', 'Metro'] as const} onChange={(value) => setRuralFilter(value as typeof ruralFilter)} testId="select-rurality" />
                   <FilterSelect label="WIC" value={wicFilter} options={['All', 'Active', 'Not authorized', 'Unknown'] as const} onChange={(value) => setWicFilter(value as typeof wicFilter)} testId="select-wic-status" />
-                  {(search || typeFilter !== 'All' || ruralFilter !== 'All' || wicFilter !== 'All' || mapLayer !== 'All vendors') && <button type="button" data-testid="button-reset-filters" onClick={resetFilters} className="flex h-8 items-center gap-1.5 px-2 text-[11px] font-semibold text-muted-foreground hover:text-foreground"><RotateCcw size={13} /> Reset</button>}
+                 {(search || typeFilter !== 'All' || ruralFilter !== 'All' || wicFilter !== 'All') && (
+  <button
+    type="button"
+    data-testid="button-reset-filters"
+    onClick={resetFilters}
+    className="flex h-8 items-center gap-1.5 px-2 text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+  >
+    <RotateCcw size={13} /> Reset
+  </button>
+)}
                 </div>
               </div>
               <div className="overflow-x-auto">
@@ -377,7 +415,18 @@ function SelectedPanel({ vendor, onClear }: { vendor?: Vendor; onClear: () => vo
 function InfoCell({ label, value, accent }: { label: string; value: string; accent?: boolean }) { return <div className="rounded-sm border border-border bg-muted/35 px-3 py-2.5"><p className="font-mono text-[9px] uppercase tracking-[.1em] text-muted-foreground">{label}</p><p className={`mt-1.5 text-[12px] font-semibold ${accent ? 'text-[#b95d4c]' : ''}`}>{value}</p></div>; }
 function StoryStat({ value, label, detail }: { value: string; label: string; detail: string }) { return <div><p className="font-serif text-[24px] font-bold">{value}</p><p className="mt-1 text-[11px] font-semibold">{label}</p><p className="mt-0.5 text-[10px] text-muted-foreground">{detail}</p></div>; }
 function LegendDot({ color, label }: { color: string; label: string }) { return <span className="flex items-center gap-1.5"><i className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />{label}</span>; }
-function TypePill({ type }: { type: VendorType }) { const color = type === 'Dollar General' ? 'bg-accent/30 text-[#765d18]' : type === 'Grocery' ? 'bg-primary/10 text-primary' : type === 'Pharmacy' ? 'bg-[#df7660]/15 text-[#a85142]' : 'bg-[#84943f]/15 text-[#617129]'; return <span className={`inline-flex whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-semibold ${color}`}>{type}</span>; }
+function TypePill({ type }: { type: VendorType }) {
+  const color =
+    type === 'Dollar General'
+      ? 'bg-accent/30 text-[#765d18]'
+      : 'bg-primary/10 text-primary';
+
+  return (
+    <span className={`inline-flex whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-semibold ${color}`}>
+      {type}
+    </span>
+  );
+}
 function WicPill({ status }: { status: WicStatus }) { const color = status === 'Active' ? 'bg-[#84943f]/15 text-[#617129]' : status === 'Not authorized' ? 'bg-[#df7660]/15 text-[#a85142]' : 'bg-muted text-muted-foreground'; return <span className={`inline-flex whitespace-nowrap rounded-full px-2 py-1 text-[10px] font-semibold ${color}`}>{status}</span>; }
 function FilterSelect({ label, value, options, onChange, testId }: { label: string; value: string; options: readonly string[]; onChange: (value: string) => void; testId: string }) { return <label className="relative flex h-8 items-center gap-1.5 rounded-sm border border-input bg-background px-2 text-[10px] font-semibold"><span className="text-muted-foreground">{label}</span><select value={value} data-testid={testId} onChange={(event) => onChange(event.target.value)} className="max-w-[100px] appearance-none bg-transparent pr-3 text-[10px] font-semibold outline-none"><>{options.map((option) => <option value={option} key={option}>{option}</option>)}</></select><ChevronDown size={11} className="pointer-events-none absolute right-1 text-muted-foreground" /></label>; }
 
