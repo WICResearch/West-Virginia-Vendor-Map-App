@@ -73,17 +73,29 @@ function AppShell() {
 }
 
 function Dashboard() {
- const [mapView, setMapView] = useState<'wic' | 'dg'>('wic');
+const [mapView, setMapView] = useState<'wic' | 'dg' | 'combined'>('wic'); 
+
+const combinedLocations: Vendor[] = [
+  ...(wicLocations as Vendor[]),
+  ...(dgLocations as Vendor[])
+];
 
 const [vendors, setVendors] = useState<Vendor[]>(
-  mapView === 'wic' ? (wicLocations as Vendor[]) : (dgLocations as Vendor[])
+  mapView === 'wic'
+    ? (wicLocations as Vendor[])
+    : mapView === 'dg'
+      ? (dgLocations as Vendor[])
+      : combinedLocations
 );
-  function switchMapView(view: 'wic' | 'dg') {
+
+function switchMapView(view: 'wic' | 'dg' | 'combined') {
   setMapView(view);
   setVendors(
     view === 'wic'
       ? (wicLocations as Vendor[])
-      : (dgLocations as Vendor[])
+      : view === 'dg'
+        ? (dgLocations as Vendor[])
+        : combinedLocations
   );
   setSelectedId('');
   setSearch('');
@@ -284,6 +296,17 @@ setWicFilter('All');
   >
     Dollar General
   </button>
+   <button
+  type="button"
+  onClick={() => switchMapView('combined')}
+  className={`rounded-sm px-3 py-1.5 text-[10px] font-semibold transition-colors ${
+    mapView === 'combined'
+      ? 'bg-card text-foreground shadow-sm'
+      : 'text-muted-foreground hover:text-foreground'
+  }`}
+>
+  Opportunity Overlay
+</button>                
 </div>
                 </div>
                    <div className="relative h-[390px] overflow-hidden bg-[#f8f8f4] sm:h-[470px]">
@@ -297,8 +320,20 @@ setWicFilter('All');
                     <button type="button" aria-label="Reset map zoom" data-testid="button-map-reset" onClick={() => setMapZoom(1)} className="p-2.5 text-muted-foreground hover:bg-muted hover:text-foreground"><LocateFixed size={16} /></button>
                   </div>
                   <div className="absolute bottom-4 left-4 z-10 flex flex-wrap gap-x-3 gap-y-1.5 rounded-sm border border-border/70 bg-card/90 px-3 py-2 font-mono text-[9px] uppercase tracking-[.08em] backdrop-blur">
-                   <LegendDot color="#2c615d" label="WIC Vendor" />
-<LegendDot color="#e0ad2d" label="Dollar General" /> 
+{mapView === 'wic' && (
+  <LegendDot color="#2c615d" label="Current WIC Vendor" />
+)}
+
+{mapView === 'dg' && (
+  <LegendDot color="#e0ad2d" label="Dollar General" />
+)}
+
+{mapView === 'combined' && (
+  <>
+    <LegendDot color="#2c615d" label="Current WIC Vendor" />
+    <LegendDot color="#e0ad2d" label="Dollar General" />
+  </>
+)}
                   </div>
                    <svg viewBox="0 0 620 410" className="h-full w-full transition-transform duration-500" style={{ transform: `scale(${mapZoom})` }} role="img" aria-label="West Virginia county map with vendor locations">
                      <image href={wvCountyMap} x="37" y="0" width="546" height="410" preserveAspectRatio="none" />
@@ -316,7 +351,13 @@ setWicFilter('All');
                 </div>
                 <div className="flex items-center justify-between border-t border-border bg-muted/30 px-4 py-2.5 font-mono text-[9px] uppercase tracking-[.1em] text-muted-foreground md:px-5">
                   <span>{filteredVendors.length} visible locations</span>
-<span>{mapView === 'wic' ? 'Current WIC Vendors' : 'Dollar General Locations'}</span>
+<span>
+  {mapView === 'wic'
+    ? 'Current WIC Vendors'
+    : mapView === 'dg'
+      ? 'Dollar General Locations'
+      : 'WIC + Dollar General Opportunity Overlay'}
+</span>
                 </div>
               </div>
 
