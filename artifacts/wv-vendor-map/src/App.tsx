@@ -30,6 +30,7 @@ import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import dgLocations from './wv-dg-map-locations.json';
 import wicLocations from './wv-wic-vendor-locations-confirmed.json';
 import wvCountyMap from '@assets/image_1787709763540.png';
+import opportunityMap from './MAP.png';
 import wicLogo from '@assets/wic_logo__1787710051410.png';
 import dohLogo from '@assets/New_Dept_of_Health_Logo_horz_RGB_1787710060679.jpg';
 import wicEmbellishmentOne from '@assets/WIC_Embellishments_01_1787710072092.png';
@@ -336,7 +337,14 @@ setWicFilter('All');
 )}
                   </div>
                    <svg viewBox="0 0 620 410" className="h-full w-full transition-transform duration-500" style={{ transform: `scale(${mapZoom})` }} role="img" aria-label="West Virginia county map with vendor locations">
-                     <image href={wvCountyMap} x="37" y="0" width="546" height="410" preserveAspectRatio="none" />
+                   <image
+  href={mapView === 'combined' ? opportunityMap : wvCountyMap}
+  x="37"
+  y="0"
+  width="546"
+  height="410"
+  preserveAspectRatio="none"
+/> 
                     {filteredVendors.map((vendor) => {
                      const active = selected?.id === vendor.id;
                      const color = vendor.type === 'Dollar General' ? '#d8a629' : '#2c615d';   
