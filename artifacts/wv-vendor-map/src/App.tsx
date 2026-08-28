@@ -354,7 +354,7 @@ const point =
   mapView === 'combined'
     ? {
         x: basePoint.x,
-        y: basePoint.y + 52 
+        y: basePoint.y + 58
       }
     : basePoint;
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
