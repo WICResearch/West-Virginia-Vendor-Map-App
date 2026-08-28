@@ -58,14 +58,10 @@ type Vendor = {
   note: string;
 };
 
-
 function imageMapPoint(vendor: Vendor) {
-  // The source map has a little white margin around the county artwork.
-  // Use the record's geographic coordinates so imported points land in the
-  // same place as the representative locations.
   return {
-    x: 53 + ((vendor.lng + 82.6) * 511) / 4.9,
-    y: 392 - ((vendor.lat - 37) * 378) / 3.7,
+    x: 61 + ((vendor.lng + 82.6) * 511) / 4.9,
+    y: 402 - ((vendor.lat - 37) * 378) / 3.7,
   };
 }
 
