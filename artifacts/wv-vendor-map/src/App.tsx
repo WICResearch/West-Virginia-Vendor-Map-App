@@ -353,10 +353,10 @@ setWicFilter('All');
 const point =
   mapView === 'combined'
     ? {
-        x: 58 + ((vendor.lng + 82.6) * 500) / 4.9,
-        y: 388 - ((vendor.lat - 37) * 360) / 3.7
+        x: 91 + ((vendor.lng + 82.64) * 460) / 4.92,
+        y: 409 - ((vendor.lat - 37.20) * 398) / 3.44
       }
-    : basePoint;        
+    : basePoint;      
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
                          {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
                          <circle cx={point.x} cy={point.y} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
