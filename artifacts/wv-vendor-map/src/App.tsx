@@ -524,6 +524,21 @@ const point =
       An existing retail footprint positioned where WIC access is limited
     </h2>
   </div>
+         <div className="mt-5 border-l-4 border-accent bg-muted/30 px-5 py-4">
+    <p className="font-mono text-[9px] uppercase tracking-[.14em] text-muted-foreground">
+      Existing Footprint
+    </p>
+
+    <p className="mt-2 font-serif text-[24px] font-bold">
+      318 locations
+    </p>
+
+    <p className="mt-2 max-w-2xl text-[11px] leading-relaxed text-muted-foreground">
+      Dollar General locations analyzed across West Virginia, providing an
+      existing retail network that could support targeted expansion of WIC
+      purchasing access.
+    </p>
+  </div>      
 </section>
 
             <section id="location-index" className="border border-border bg-card">
