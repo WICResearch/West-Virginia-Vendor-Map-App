@@ -424,6 +424,18 @@ const point =
       }
     : basePoint;      
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
+          {isAccessGap && (
+  <circle
+    cx={point.x}
+    cy={point.y}
+    r="9"
+    fill="none"
+    stroke="#d96b52"
+    strokeWidth="2.5"
+    opacity=".95"
+    pointerEvents="none"
+  />
+)}
                          {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
                          <circle cx={point.x} cy={point.y} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
                          {active && <circle cx={point.x} cy={point.y} r="2" fill="#f7f2e6" />}
