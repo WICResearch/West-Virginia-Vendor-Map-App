@@ -393,6 +393,7 @@ setWicFilter('All');
   <>
     <LegendDot color="#2c615d" label="Current WIC Vendor" />
     <LegendDot color="#e0ad2d" label="Dollar General" />
+    <LegendDot color="#d96b52" label="10+ Mile WIC Access Gap" />
   </>
 )}
                   </div>
