@@ -296,8 +296,11 @@ setWicFilter('All');
     to currently authorized WIC retailers.
   </p>
 </div>
-          <section
- <Metric
+      <section
+  id="partnership-overview"
+  className="grid scroll-mt-32 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+>
+  <Metric  
   label="DG Locations Analyzed"
   value="318"
   detail="Dollar General locations across West Virginia"
