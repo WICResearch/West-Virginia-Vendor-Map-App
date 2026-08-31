@@ -572,7 +572,41 @@ const point =
   </div> 
   </div>
 </section>
+<section className="overflow-hidden border border-border bg-card shadow-sm">
+  <div className="grid md:grid-cols-[280px_1fr]">
+    <div className="flex flex-col justify-center bg-[#f4c430] px-6 py-6">
+      <p className="font-mono text-[9px] uppercase tracking-[.14em] text-black/60">
+        Existing WIC Market Activity
+      </p>
 
+      <p className="mt-2 font-serif text-[38px] font-bold leading-none text-black">
+        $38.6M
+      </p>
+
+      <p className="mt-2 text-[11px] font-semibold text-black/70">
+        Annual WIC redemption
+      </p>
+    </div>
+
+    <div className="flex flex-col justify-center px-6 py-6">
+      <h2 className="font-serif text-[20px] font-bold leading-snug">
+        WIC purchasing already occurs in communities where Dollar General operates.
+      </h2>
+
+      <p className="mt-3 max-w-3xl text-[12px] leading-relaxed text-muted-foreground">
+        Approximately $38.6 million in annual WIC redemption occurs across ZIP
+        codes where Dollar General operates and current WIC redemption is recorded.
+        This demonstrates an existing WIC grocery market within Dollar General's
+        West Virginia footprint.
+      </p>
+
+      <p className="mt-3 border-l-2 border-border pl-3 text-[10px] italic leading-relaxed text-muted-foreground">
+        Market context only. This figure represents total WIC redemption in these
+        ZIP codes and is not a projection of potential Dollar General revenue.
+      </p>
+    </div>
+  </div>
+</section>
             <section id="location-index" className="border border-border bg-card">
               <div className="flex flex-col gap-4 border-b border-border p-4 md:flex-row md:items-center md:justify-between md:px-5">
                 <div><h2 className="font-serif text-[18px] font-bold">Location index</h2><p className="mt-1 text-[11px] text-muted-foreground">Select a row to inspect the field context.</p></div>
