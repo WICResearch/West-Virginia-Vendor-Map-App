@@ -538,7 +538,22 @@ const point =
       existing retail network that could support targeted expansion of WIC
       purchasing access.
     </p>
-  </div>      
+  </div>  
+     <div className="mt-3 border-l-4 border-primary bg-muted/30 px-5 py-4">
+    <p className="font-mono text-[9px] uppercase tracking-[.14em] text-muted-foreground">
+      Existing Nutrition-Assistance Infrastructure
+    </p>
+
+    <p className="mt-2 font-serif text-[24px] font-bold">
+      96% SNAP authorized
+    </p>
+
+    <p className="mt-2 max-w-2xl text-[11px] leading-relaxed text-muted-foreground">
+      Nearly all Dollar General locations analyzed are identified as SNAP
+      authorized, demonstrating an existing foundation for serving households
+      participating in federal nutrition-assistance programs.
+    </p>
+  </div>          
 </section>
 
             <section id="location-index" className="border border-border bg-card">
