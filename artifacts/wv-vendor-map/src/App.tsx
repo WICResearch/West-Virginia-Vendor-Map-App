@@ -297,10 +297,7 @@ setWicFilter('All');
   </p>
 </div>
           <section
-  id="partnership-overview"
-  className="grid scroll-mt-32 gap-3 sm:grid-cols-2 xl:grid-cols-4"
->
-            <Metric
+ <Metric
   label="DG Locations Analyzed"
   value="318"
   detail="Dollar General locations across West Virginia"
@@ -309,28 +306,28 @@ setWicFilter('All');
 />
 
 <Metric
-  label="Retail Network Gaps"
+  label="DG Stores in ZIPs Without WIC"
   value="118"
-  detail="DG stores in 110 ZIPs without a current WIC vendor"
+  detail="Located in 110 ZIP codes without a current WIC vendor"
   icon={<Navigation size={16} />}
   accent="teal"
 />
 
 <Metric
-  label="10+ Mile Access Gaps"
+  label="DG Stores in 10+ Mile WIC Gaps"
   value="32"
-  detail="DG locations positioned in identified WIC access gaps"
+  detail="Existing DG locations in identified WIC retail access-gap communities"
   icon={<Activity size={16} />}
   accent="coral"
 />
 
 <Metric
-  label="WIC Participants"
+  label="WIC Participants in Gap Communities"
   value="2,451"
-  detail="Active participants in these access-gap communities"
+  detail="1,570 active WIC families live in these communities"
   icon={<Check size={16} />}
   accent="green"
-/> 
+/>
             </section>
 
            <section
