@@ -281,7 +281,21 @@ setWicFilter('All');
 
           <div className="mx-auto max-w-[1600px] space-y-5 p-4 md:p-7">
             {importNotice && <div role="status" data-testid="status-import-notice" className="animate-rise flex items-center justify-between border border-accent/50 bg-accent/15 px-4 py-3 text-[12px] font-semibold text-foreground"><span className="flex items-center gap-2"><Check size={15} className="text-[#6f7f31]" /> {importNotice}</span><button type="button" aria-label="Dismiss import notice" data-testid="button-dismiss-import-notice" onClick={() => setImportNotice('')}><X size={15} /></button></div>}
+<div className="mb-6 border-l-4 border-[#f4c430] bg-card px-6 py-5 shadow-sm">
+  <p className="font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground">
+    The Opportunity
+  </p>
 
+  <h2 className="mt-2 max-w-4xl font-serif text-2xl font-bold leading-tight md:text-3xl">
+    Dollar General is already positioned to close critical WIC retail access gaps across West Virginia.
+  </h2>
+
+  <p className="mt-3 max-w-4xl text-[13px] leading-relaxed text-muted-foreground">
+    WV WIC identified communities where Dollar General's existing footprint
+    overlaps with WIC families, limited retailer choice, and significant travel
+    to currently authorized WIC retailers.
+  </p>
+</div>
           <section
   id="partnership-overview"
   className="grid scroll-mt-32 gap-3 sm:grid-cols-2 xl:grid-cols-4"
