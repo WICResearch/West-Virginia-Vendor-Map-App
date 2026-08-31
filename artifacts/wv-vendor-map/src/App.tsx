@@ -405,10 +405,16 @@ setWicFilter('All');
   height="410"
   preserveAspectRatio="none"
 /> 
-                    {filteredVendors.map((vendor) => {
-                     const active = selected?.id === vendor.id;
-                     const color = vendor.type === 'Dollar General' ? '#d8a629' : '#2c615d';   
-               const basePoint = imageMapPoint(vendor);
+                {filteredVendors.map((vendor) => {
+  const active = selected?.id === vendor.id;
+  const color = vendor.type === 'Dollar General' ? '#d8a629' : '#2c615d';
+
+  const isAccessGap =
+    mapView === 'combined' &&
+    vendor.type === 'Dollar General' &&
+    vendor.accessGap10Miles === true;
+
+  const basePoint = imageMapPoint(vendor);   
 
 const point =
   mapView === 'combined'
