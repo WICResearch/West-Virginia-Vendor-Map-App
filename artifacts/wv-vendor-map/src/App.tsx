@@ -332,7 +332,29 @@ setWicFilter('All');
   accent="green"
 />
             </section>
+            
+<div className="grid gap-4 border border-border bg-primary px-6 py-5 text-primary-foreground shadow-sm md:grid-cols-[220px_1fr] md:items-center">
+  <div>
+    <p className="font-serif text-[38px] font-bold leading-none">
+      12.6 miles
+    </p>
+    <p className="mt-2 font-mono text-[9px] uppercase tracking-[.14em] text-primary-foreground/70">
+      Average Potential Travel Reduction
+    </p>
+  </div>
 
+  <div className="border-t border-primary-foreground/20 pt-4 md:border-l md:border-t-0 md:pl-6 md:pt-0">
+    <p className="font-serif text-[18px] font-bold leading-snug">
+      Bringing WIC purchasing closer to where families already live and shop.
+    </p>
+
+    <p className="mt-2 max-w-3xl text-[11px] leading-relaxed text-primary-foreground/70">
+      Across the 32 identified 10+ mile WIC access-gap communities, a nearby
+      Dollar General could reduce the average distance between the target
+      community and WIC retail access by approximately 12.6 miles.
+    </p>
+  </div>
+</div>
            <section
   id="access-gaps"
   className="grid scroll-mt-32 gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(330px,.75fr)]"
