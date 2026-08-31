@@ -552,9 +552,40 @@ const point =
                 </table>
               </div>
             </section>
-            <footer className="flex flex-col gap-2 border-t border-border pt-4 text-[10px] leading-relaxed text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-              <span><strong className="text-foreground">Fieldline / WV Vendor Map</strong> · A working instrument for public health teams</span><span className="font-mono uppercase tracking-[.1em]">Representative data · Updated 06 Feb 2025</span>
-            </footer>
+            <footer className="mt-8 border-t border-border bg-card px-5 py-6">
+  <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+    <div className="flex items-center gap-4">
+      <img
+        src={dohLogo}
+        alt="West Virginia Department of Health"
+        className="h-9 w-auto max-w-[190px] object-contain"
+      />
+
+      <div className="h-8 w-px bg-border" />
+
+      <img
+        src={wicLogo}
+        alt="West Virginia WIC"
+        className="h-10 w-auto object-contain"
+      />
+    </div>
+    <div className="max-w-xl md:text-right">
+      <p className="font-serif text-[14px] font-bold text-foreground">
+        West Virginia Department of Health · Office of Nutrition Services
+      </p>
+
+      <p className="mt-1 text-[10px] leading-relaxed text-muted-foreground">
+        West Virginia WIC retail access analysis supporting exploration of a
+        potential Dollar General partnership and targeted pilot.
+      </p>
+
+      <p className="mt-2 font-mono text-[9px] uppercase tracking-[.1em] text-muted-foreground">
+        WV WIC · Dollar General Partnership Dashboard
+      </p>
+    </div>
+  </div>
+</footer>
           </div>
         </main>
       </div>
