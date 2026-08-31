@@ -7,24 +7,14 @@ import {
   CircleAlert,
   Info,
   MapPinned,
-  Menu,
   Route,
   Target,
   Users,
 } from 'lucide-react';
-import { useLocation } from 'wouter';
 import { analysisData } from '@/analysis-data';
-import wicLogo from '@assets/wic_logo__1787710051410.png';
 import dohLogo from '@assets/New_Dept_of_Health_Logo_horz_RGB_1787710060679.jpg';
 
 type Candidate = (typeof analysisData.priorityLocations)[number];
-
-const navItems = [
-  { label: 'Map overview', icon: MapPinned, href: '/' },
-  { label: 'Pilot analysis', icon: BarChart3, href: '/pilot-analysis' },
-  { label: 'Opportunity gaps', icon: Route, href: '/' },
-  { label: 'Data & methods', icon: BookOpen, href: '/' },
-];
 
 function formatMiles(value: number) {
   return value > 0 ? `${value.toFixed(value < 10 ? 1 : 1)} mi` : 'No savings';
@@ -110,8 +100,6 @@ function ScoreComponent({ label, value, description, color }: { label: string; v
 }
 
 export function PilotAnalysis() {
-  const [, setLocation] = useLocation();
-  const [mobileNav, setMobileNav] = useState(false);
   const [selectedRank, setSelectedRank] = useState(1);
   const candidates = analysisData.priorityLocations.slice(0, 8);
   const selected = candidates.find((candidate) => candidate['Priority Rank'] === selectedRank) ?? candidates[0];
@@ -124,46 +112,11 @@ export function PilotAnalysis() {
   return (
     <div className="min-h-[100dvh] bg-background text-foreground">
       <div className="flex min-h-[100dvh]">
-        <aside className={`${mobileNav ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-40 flex w-[258px] flex-col bg-sidebar text-sidebar-foreground shadow-xl transition-transform duration-300 md:relative md:translate-x-0`}>
-          <div className="flex h-[84px] items-center gap-3 border-b border-sidebar-border px-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground"><BarChart3 size={20} strokeWidth={2.5} /></div>
-            <div><p className="font-serif text-[17px] font-bold tracking-tight">Fieldline</p><p className="font-mono text-[9px] uppercase tracking-[.18em] text-sidebar-foreground/55">WV vendor map</p></div>
-          </div>
-          <div className="px-4 pt-7">
-            <p className="px-3 pb-2 font-mono text-[9px] uppercase tracking-[.18em] text-sidebar-foreground/40">Research workspace</p>
-            <nav className="space-y-1">
-              {navItems.map(({ label, icon: Icon, href }) => (
-                <button
-                  type="button"
-                  key={label}
-                  data-testid={`button-nav-${label.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => { setMobileNav(false); if (href === '/pilot-analysis') return; setLocation(href); }}
-                  className={`flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-[13px] transition-colors ${label === 'Pilot analysis' ? 'bg-sidebar-accent text-sidebar-primary' : 'text-sidebar-foreground/65 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground'}`}
-                >
-                  <Icon size={16} strokeWidth={1.8} />
-                  {label}
-                  {label === 'Pilot analysis' && <span className="ml-auto rounded-full bg-sidebar-primary px-1.5 py-0.5 font-mono text-[9px] font-bold text-sidebar-primary-foreground">NEW</span>}
-                </button>
-              ))}
-            </nav>
-          </div>
-          <div className="mt-auto px-6 pb-6">
-            <div className="mb-5 border-t border-sidebar-border pt-5">
-              <p className="font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/40">Program partner</p>
-              <img src={wicLogo} alt="West Virginia WIC — Nourishing the Future" className="mt-3 w-[174px] rounded-sm bg-white object-contain p-1" />
-            </div>
-            <div className="border-t border-sidebar-border pt-5">
-              <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/45"><span>Source status</span><span className="flex items-center gap-1.5 text-sidebar-primary"><span className="h-1.5 w-1.5 rounded-full bg-sidebar-primary" /> Workbook loaded</span></div>
-              <p className="mt-2 text-[11px] leading-relaxed text-sidebar-foreground/55">Pilot ranking is provisional. Validate store operations and local conditions before outreach.</p>
-            </div>
-          </div>
-        </aside>
-        {mobileNav && <button type="button" aria-label="Close navigation" data-testid="button-close-analysis-navigation" onClick={() => setMobileNav(false)} className="fixed inset-0 z-30 bg-foreground/30 md:hidden" />}
-
+       
         <main className="min-w-0 flex-1">
           <header className="flex min-h-[84px] items-center justify-between border-b border-border bg-card/90 px-4 py-4 backdrop-blur md:px-8">
             <div className="flex items-center gap-3">
-              <button type="button" data-testid="button-open-analysis-navigation" onClick={() => setMobileNav(true)} className="rounded-sm p-2 text-muted-foreground hover:bg-muted md:hidden"><Menu size={20} /></button>
+              
               <div><div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground"><span className="h-1.5 w-1.5 rounded-full bg-accent" /> West Virginia / pilot briefing</div><h1 className="mt-1 font-serif text-[22px] font-bold tracking-tight md:text-[25px]">Pilot analysis</h1></div>
             </div>
             <img src={dohLogo} alt="West Virginia Department of Health" className="hidden h-8 w-auto max-w-[170px] object-contain sm:block" />
@@ -289,7 +242,7 @@ export function PilotAnalysis() {
             </section>
 
             <footer className="flex flex-col gap-2 border-t border-border pt-4 text-[10px] leading-relaxed text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-              <span><strong className="text-foreground">Fieldline / WV Vendor Map</strong> · West Virginia WIC pilot briefing</span><span className="flex items-center gap-2 font-mono uppercase tracking-[.1em]"><CircleAlert size={12} /> Provisional · workbook analysis · verify before publication</span>
+            <span><strong className="text-foreground">West Virginia WIC</strong> · Dollar General partnership pilot analysis</span> 
             </footer>
           </div>
         </main>
