@@ -55,6 +55,26 @@ type Vendor = {
   lng: number;
   distance: string;
   note: string;
+
+  zip?: string;
+  wicRegion?: string;
+  dgStoreType?: string;
+  produceFresh?: string | null;
+  activeWicFamilies?: number | null;
+  activeWicParticipants?: number | null;
+  nearestWicVendor?: string | null;
+  nearestWicVendorMiles?: number | null;
+  dgMilesFromCommunity?: number | null;
+  potentialMilesSaved?: number | null;
+  accessGap10Miles?: boolean | null;
+  noOtherGroceryOption?: boolean | null;
+  nearestFullServiceGroceryMiles?: number | null;
+  snapAuthorized?: boolean | null;
+  pilotTier?: string | null;
+  priorityRank?: number | null;
+  recommendedForPilot?: string | null;
+  pilotPriorityScore?: number | null;
+  rucaClassification?: string | null;
 };
 
 function imageMapPoint(vendor: Vendor) {
@@ -473,18 +493,222 @@ function Metric({ label, value, detail, icon, accent }: { label: string; value: 
   return <div className="animate-rise border border-border bg-card p-4 shadow-sm"><div className="flex items-start justify-between"><p className="font-mono text-[9px] uppercase tracking-[.15em] text-muted-foreground">{label}</p><span className={`flex h-7 w-7 items-center justify-center rounded-sm ${colorMap[accent]}`}>{icon}</span></div><p className="mt-4 font-serif text-[29px] font-bold leading-none tracking-tight">{value}</p><p className="mt-2 text-[11px] text-muted-foreground">{detail}</p></div>;
 }
 
-function SelectedPanel({ vendor, onClear }: { vendor?: Vendor; onClear: () => void }) {
-  if (!vendor) return <div className="flex min-h-[390px] items-center justify-center border border-border bg-card p-6 text-center"><div><Store size={26} className="mx-auto text-muted-foreground/50" /><p className="mt-3 font-serif text-lg font-bold">Select a location</p><p className="mt-1 text-[12px] text-muted-foreground">Choose a map point or table row to inspect it.</p></div></div>;
-  return <div className="animate-rise border border-border bg-card shadow-sm">
-    <div className="flex items-start justify-between border-b border-border bg-primary px-5 py-5 text-primary-foreground"><div><p className="font-mono text-[9px] uppercase tracking-[.16em] text-primary-foreground/60">Selected location</p><h2 className="mt-2 font-serif text-[22px] font-bold leading-tight">{vendor.city}</h2><p className="mt-1 text-[12px] text-primary-foreground/70">{vendor.county} County, West Virginia</p></div><button type="button" aria-label="Clear selected location" data-testid="button-clear-selection" onClick={onClear} className="rounded-sm p-1 text-primary-foreground/60 hover:bg-primary-foreground/10 hover:text-primary-foreground"><X size={17} /></button></div>
-    <div className="space-y-5 p-5">
-      <div className="flex items-center justify-between gap-3"><div><p className="text-[13px] font-semibold">{vendor.name}</p><p className="mt-1 text-[10px] text-muted-foreground">{vendor.lat.toFixed(3)}, {vendor.lng.toFixed(3)}</p></div><TypePill type={vendor.type} /></div>
-      <div className="grid grid-cols-2 gap-2"><InfoCell label="Rurality" value={vendor.rurality} /><InfoCell label="WIC status" value={vendor.wic} accent={vendor.wic !== 'Active'} /></div>
-      <div className="border-l-2 border-accent bg-accent/10 px-3 py-3"><p className="font-mono text-[9px] uppercase tracking-[.12em] text-muted-foreground">Field note</p><p className="mt-2 text-[12px] leading-relaxed text-foreground">{vendor.note}</p></div>
-      <div className="flex items-center justify-between border-t border-border pt-4"><span className="text-[11px] text-muted-foreground">Nearest mapped route</span><strong className="font-mono text-[12px]">{vendor.distance}</strong></div>
-      <button type="button" data-testid="button-focus-location" onClick={() => document.getElementById('location-index')?.scrollIntoView({ behavior: 'smooth' })} className="flex w-full items-center justify-center gap-2 border border-border py-2.5 text-[11px] font-bold transition-colors hover:bg-muted"><Navigation size={14} /> Add to field brief</button>
+function SelectedPanel({
+  vendor,
+  onClear,
+}: {
+  vendor?: Vendor;
+  onClear: () => void;
+}) {
+  if (!vendor) {
+    return (
+      <div className="flex min-h-[390px] items-center justify-center border border-border bg-card p-6 text-center">
+        <div>
+          <Store size={26} className="mx-auto text-muted-foreground/50" />
+          <p className="mt-3 font-serif text-lg font-bold">
+            Select a location
+          </p>
+          <p className="mt-1 text-[12px] text-muted-foreground">
+            Click a Dollar General location on the map to view access and pilot opportunity details.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const isDollarGeneral = vendor.type === 'Dollar General';
+
+  return (
+    <div className="animate-rise border border-border bg-card shadow-sm">
+      <div className="flex items-start justify-between border-b border-border bg-primary px-5 py-5 text-primary-foreground">
+        <div>
+          <p className="font-mono text-[9px] uppercase tracking-[.16em] text-primary-foreground/60">
+            {isDollarGeneral ? 'DG opportunity profile' : 'WIC vendor profile'}
+          </p>
+
+          <h2 className="mt-2 font-serif text-[22px] font-bold leading-tight">
+            {vendor.city}
+          </h2>
+
+          <p className="mt-1 text-[12px] text-primary-foreground/70">
+            {vendor.county} County, West Virginia
+          </p>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Clear selected location"
+          onClick={onClear}
+          className="rounded-sm p-1 text-primary-foreground/60 hover:bg-primary-foreground/10 hover:text-primary-foreground"
+        >
+          <X size={17} />
+        </button>
+      </div>
+
+      <div className="space-y-5 p-5">
+        <div>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[13px] font-semibold">{vendor.name}</p>
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                {vendor.note}
+              </p>
+            </div>
+
+            <TypePill type={vendor.type} />
+          </div>
+        </div>
+
+        {isDollarGeneral ? (
+          <>
+            <div className="grid grid-cols-2 gap-2">
+              <ProfileStat
+                label="Active WIC families"
+                value={
+                  vendor.activeWicFamilies != null
+                    ? vendor.activeWicFamilies.toLocaleString()
+                    : '—'
+                }
+              />
+
+              <ProfileStat
+                label="WIC participants"
+                value={
+                  vendor.activeWicParticipants != null
+                    ? vendor.activeWicParticipants.toLocaleString()
+                    : '—'
+                }
+              />
+
+              <ProfileStat
+                label="Nearest WIC vendor"
+                value={
+                  vendor.nearestWicVendorMiles != null
+                    ? `${vendor.nearestWicVendorMiles.toFixed(1)} mi`
+                    : '—'
+                }
+              />
+
+              <ProfileStat
+                label="Potential miles saved"
+                value={
+                  vendor.potentialMilesSaved != null
+                    ? `${vendor.potentialMilesSaved.toFixed(1)} mi`
+                    : '—'
+                }
+              />
+            </div>
+
+            <div className="space-y-3 border-t border-border pt-4">
+              <ProfileRow
+                label="Pilot tier"
+                value={vendor.pilotTier || 'Not assigned'}
+              />
+
+              <ProfileRow
+                label="Priority rank"
+                value={
+                  vendor.priorityRank != null
+                    ? `#${vendor.priorityRank}`
+                    : '—'
+                }
+              />
+
+              <ProfileRow
+                label="10+ mile access gap"
+                value={
+                  vendor.accessGap10Miles == null
+                    ? 'Unknown'
+                    : vendor.accessGap10Miles
+                      ? 'Yes'
+                      : 'No'
+                }
+              />
+
+              <ProfileRow
+                label="No other grocery option"
+                value={
+                  vendor.noOtherGroceryOption == null
+                    ? 'Unknown'
+                    : vendor.noOtherGroceryOption
+                      ? 'Yes'
+                      : 'No'
+                }
+              />
+
+              <ProfileRow
+                label="SNAP authorized"
+                value={
+                  vendor.snapAuthorized == null
+                    ? 'Unknown'
+                    : vendor.snapAuthorized
+                      ? 'Yes'
+                      : 'No'
+                }
+              />
+
+              <ProfileRow
+                label="Community classification"
+                value={vendor.rucaClassification || vendor.rurality}
+              />
+            </div>
+
+            {vendor.nearestWicVendor && (
+              <div className="border-l-2 border-accent bg-accent/10 px-3 py-3">
+                <p className="font-mono text-[9px] uppercase tracking-[.12em] text-muted-foreground">
+                  Nearest current WIC retailer
+                </p>
+
+                <p className="mt-2 text-[12px] font-semibold leading-relaxed">
+                  {vendor.nearestWicVendor}
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="grid grid-cols-2 gap-2">
+            <InfoCell label="Rurality" value={vendor.rurality} />
+            <InfoCell label="WIC status" value={vendor.wic} />
+          </div>
+        )}
+      </div>
     </div>
-  </div>;
+  );
+}
+
+function ProfileStat({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-sm border border-border bg-muted/35 px-3 py-3">
+      <p className="font-serif text-[19px] font-bold leading-none">
+        {value}
+      </p>
+
+      <p className="mt-2 font-mono text-[8px] uppercase tracking-[.1em] text-muted-foreground">
+        {label}
+      </p>
+    </div>
+  );
+}
+
+function ProfileRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 text-[11px]">
+      <span className="text-muted-foreground">{label}</span>
+      <span className="text-right font-semibold">{value}</span>
+    </div>
+  );
 }
 
 function InfoCell({ label, value, accent }: { label: string; value: string; accent?: boolean }) { return <div className="rounded-sm border border-border bg-muted/35 px-3 py-2.5"><p className="font-mono text-[9px] uppercase tracking-[.1em] text-muted-foreground">{label}</p><p className={`mt-1.5 text-[12px] font-semibold ${accent ? 'text-[#b95d4c]' : ''}`}>{value}</p></div>; }
