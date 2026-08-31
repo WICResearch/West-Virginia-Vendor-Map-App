@@ -444,7 +444,19 @@ const point =
     pointerEvents="none"
   />
 )}
-                         {active && <circle cx={point.x} cy={point.y} r="13" fill="none" stroke={color} strokeWidth="2" opacity=".6" className="focus-ring" />}
+                      {active && (
+  <circle
+    cx={point.x}
+    cy={point.y}
+    r="15"
+    fill="none"
+    stroke="#111827"
+    strokeWidth="3"
+    opacity=".9"
+    className="focus-ring"
+    pointerEvents="none"
+  />
+)}
                          <circle cx={point.x} cy={point.y} r={active ? 7 : 5.5} fill={color} stroke="#f7f2e6" strokeWidth="2" />
                          {active && <circle cx={point.x} cy={point.y} r="2" fill="#f7f2e6" />}
                       </g>;
