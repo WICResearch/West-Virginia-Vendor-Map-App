@@ -635,6 +635,22 @@ function SelectedPanel({
 
         {isDollarGeneral ? (
           <>
+           {vendor.accessGap10Miles === true && (
+      <div className="border-l-4 border-[#d96b52] bg-[#d96b52]/10 px-4 py-3">
+        <p className="font-mono text-[9px] uppercase tracking-[.14em] text-[#b44f3b]">
+          WIC Access Opportunity
+        </p>
+
+        <p className="mt-1.5 font-serif text-[16px] font-bold leading-snug">
+          This Dollar General is positioned in a 10+ mile WIC retail access-gap community.
+        </p>
+
+        <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+          Existing store infrastructure could provide a closer WIC shopping option
+          for families in this community.
+        </p>
+      </div>
+    )} 
             <div className="grid grid-cols-2 gap-2">
               <ProfileStat
                 label="Active WIC families"
