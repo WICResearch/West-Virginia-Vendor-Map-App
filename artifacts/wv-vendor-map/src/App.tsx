@@ -14,7 +14,6 @@ import {
   Database,
   LocateFixed,
   Map as MapIcon,
-  Menu,
   Minus,
   Navigation,
   Plus,
@@ -70,7 +69,7 @@ function AppShell() {
 }
 
 function Dashboard() {
-const [mapView, setMapView] = useState<'wic' | 'dg' | 'combined'>('wic'); 
+const [mapView, setMapView] = useState<'wic' | 'dg' | 'combined'>('dg');
 
 const combinedLocations: Vendor[] = [
   ...(wicLocations as Vendor[]),
@@ -107,7 +106,6 @@ setWicFilter('All');
   const [wicFilter, setWicFilter] = useState<'All' | WicStatus>('All');
 
   const [activeNav, setActiveNav] = useState('Map overview');
-  const [mobileNav, setMobileNav] = useState(false);
   const [importNotice, setImportNotice] = useState('');
   const [mapZoom, setMapZoom] = useState(1);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -185,63 +183,21 @@ setWicFilter('All');
   return (
     <div className="min-h-[100dvh] bg-background text-foreground">
       <div className="flex min-h-[100dvh]">
-        <aside className={`${mobileNav ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-40 flex w-[258px] flex-col bg-sidebar text-sidebar-foreground shadow-xl transition-transform duration-300 md:relative md:translate-x-0`}>
-          <div className="flex h-[84px] items-center gap-3 border-b border-sidebar-border px-6">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
-              <MapIcon size={21} strokeWidth={2.5} />
-              <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full border-2 border-sidebar bg-accent" />
-            </div>
-            <div>
-              <p className="font-serif text-[17px] font-bold tracking-tight">Fieldline</p>
-              <p className="font-mono text-[9px] uppercase tracking-[.18em] text-sidebar-foreground/55">WV vendor map</p>
-            </div>
-          </div>
-          <div className="px-4 pt-7">
-            <p className="px-3 pb-2 font-mono text-[9px] uppercase tracking-[.18em] text-sidebar-foreground/40">Research workspace</p>
-            <nav className="space-y-1">
-              {[
-                { label: 'Map overview', icon: MapIcon },
-                { label: 'Pilot analysis', icon: BarChart3 },
-                { label: 'Opportunity gaps', icon: Activity },
-                { label: 'Data & methods', icon: Database },
-              ].map(({ label, icon: Icon }) => (
-                <button
-                  type="button"
-                  key={label}
-                  data-testid={`button-nav-${label.toLowerCase().replace(/\s+/g, '-')}`}
-                  onClick={() => { setMobileNav(false); if (label === 'Pilot analysis') { setLocation('/pilot-analysis'); return; } setActiveNav(label); }}
-                  className={`flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-[13px] transition-colors ${activeNav === label ? 'bg-sidebar-accent text-sidebar-primary' : 'text-sidebar-foreground/65 hover:bg-sidebar-accent/70 hover:text-sidebar-foreground'}`}
-                >
-                  <Icon size={16} strokeWidth={1.8} />
-                  {label}
-                  {label === 'Opportunity gaps' && <span className="ml-auto rounded-full bg-accent px-1.5 py-0.5 font-mono text-[9px] font-bold text-accent-foreground">{gapCount}</span>}
-                </button>
-              ))}
-            </nav>
-          </div>
-          <div className="mt-auto px-6 pb-6">
-             <div className="mb-5 border-t border-sidebar-border pt-5">
-               <p className="font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/40">Program partner</p>
-               <img src={wicLogo} alt="West Virginia WIC — Nourishing the Future" className="mt-3 w-[174px] rounded-sm bg-white object-contain p-1" />
-             </div>
-            <div className="border-t border-sidebar-border pt-5">
-              <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[.12em] text-sidebar-foreground/45">
-                <span>Source status</span>
-                <span className="flex items-center gap-1.5 text-sidebar-primary"><span className="h-1.5 w-1.5 rounded-full bg-sidebar-primary" /> Local data</span>
-              </div>
-              <p className="mt-2 text-[11px] leading-relaxed text-sidebar-foreground/55">Representative locations for planning conversations. Verify before publication.</p>
-            </div>
-          </div>
-        </aside>
-        {mobileNav && <button type="button" aria-label="Close navigation" data-testid="button-close-navigation" onClick={() => setMobileNav(false)} className="fixed inset-0 z-30 bg-foreground/30 md:hidden" />}
-
+       
+       
         <main className="min-w-0 flex-1">
           <header className="flex min-h-[84px] items-center justify-between border-b border-border bg-card/90 px-4 py-4 backdrop-blur md:px-8">
             <div className="flex items-center gap-3">
-              <button type="button" data-testid="button-open-navigation" onClick={() => setMobileNav(true)} className="rounded-sm p-2 text-muted-foreground hover:bg-muted md:hidden"><Menu size={20} /></button>
+              
               <div>
-                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground"><span className="h-1.5 w-1.5 rounded-full bg-accent" /> West Virginia / statewide view</div>
-                <h1 className="mt-1 font-serif text-[22px] font-bold tracking-tight md:text-[25px]">{activeNav}</h1>
+                <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[.18em] text-muted-foreground">
+  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+  West Virginia WIC
+</div>
+
+<h1 className="mt-1 font-serif text-[22px] font-bold tracking-tight md:text-[25px]">
+  Dollar General Partnership Dashboard
+</h1>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -250,24 +206,112 @@ setWicFilter('All');
               <button type="button" data-testid="button-import-vendors" onClick={() => fileInputRef.current?.click()} className="flex items-center gap-2 rounded-sm border border-border bg-background px-3 py-2 text-[12px] font-semibold text-foreground transition-colors hover:border-primary hover:bg-muted"><Upload size={15} /> <span className="hidden sm:inline">Import list</span></button>
               <button type="button" data-testid="button-export-vendors" onClick={() => { const blob = new Blob([JSON.stringify(vendors, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const anchor = document.createElement('a'); anchor.href = url; anchor.download = 'wv-vendor-map.json'; anchor.click(); URL.revokeObjectURL(url); }} className="flex items-center gap-2 rounded-sm bg-primary px-3 py-2 text-[12px] font-semibold text-primary-foreground transition-transform hover:-translate-y-px"><ArrowDownToLine size={15} /> <span className="hidden sm:inline">Export view</span></button>
             </div>
-          </header>
+                    </header>
+
+          <nav className="border-b border-border bg-card px-4 md:px-8">
+            <div className="mx-auto flex max-w-[1600px] items-center gap-1 overflow-x-auto py-2">
+
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById('partnership-overview')?.scrollIntoView({
+                    behavior: 'smooth',
+                  })
+                }
+                className="whitespace-nowrap rounded-sm px-4 py-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Partnership Overview
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setLocation('/pilot-analysis')}
+                className="whitespace-nowrap rounded-sm px-4 py-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Pilot Opportunities
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  switchMapView('combined');
+                  document.getElementById('access-gaps')?.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                }}
+                className="whitespace-nowrap rounded-sm px-4 py-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Access Gaps
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  document.getElementById('location-index')?.scrollIntoView({
+                    behavior: 'smooth',
+                  })
+                }
+                className="whitespace-nowrap rounded-sm px-4 py-2 text-[12px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                Location Data
+              </button>
+
+            </div>
+          </nav>
 
           <div className="mx-auto max-w-[1600px] space-y-5 p-4 md:p-7">
             {importNotice && <div role="status" data-testid="status-import-notice" className="animate-rise flex items-center justify-between border border-accent/50 bg-accent/15 px-4 py-3 text-[12px] font-semibold text-foreground"><span className="flex items-center gap-2"><Check size={15} className="text-[#6f7f31]" /> {importNotice}</span><button type="button" aria-label="Dismiss import notice" data-testid="button-dismiss-import-notice" onClick={() => setImportNotice('')}><X size={15} /></button></div>}
 
-            <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              <Metric label="Vendors mapped" value={vendors.length.toString()} detail="Across 22 counties" icon={<Store size={16} />} accent="yellow" />
-              <Metric label="Rural locations" value={`${ruralCount}/${vendors.length}`} detail={`${Math.round((ruralCount / Math.max(vendors.length, 1)) * 100)}% of mapped vendors`} icon={<Navigation size={16} />} accent="teal" />
-              <Metric label="WIC opportunity" value={gapCount.toString()} detail="Not active or unknown" icon={<Activity size={16} />} accent="coral" />
-              <Metric label="Active WIC vendors" value={activeCount.toString()} detail="Known authorizations" icon={<Check size={16} />} accent="green" />
+          <section
+  id="partnership-overview"
+  className="grid scroll-mt-32 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+>
+            <Metric
+  label="DG Locations Analyzed"
+  value="318"
+  detail="Dollar General locations across West Virginia"
+  icon={<Store size={16} />}
+  accent="yellow"
+/>
+
+<Metric
+  label="Retail Network Gaps"
+  value="118"
+  detail="DG stores in 110 ZIPs without a current WIC vendor"
+  icon={<Navigation size={16} />}
+  accent="teal"
+/>
+
+<Metric
+  label="10+ Mile Access Gaps"
+  value="32"
+  detail="DG locations positioned in identified WIC access gaps"
+  icon={<Activity size={16} />}
+  accent="coral"
+/>
+
+<Metric
+  label="WIC Participants"
+  value="2,451"
+  detail="Active participants in these access-gap communities"
+  icon={<Check size={16} />}
+  accent="green"
+/> 
             </section>
 
-            <section className="grid gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(330px,.75fr)]">
+           <section
+  id="access-gaps"
+  className="grid scroll-mt-32 gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(330px,.75fr)]"
+>
               <div className="min-w-0 overflow-hidden border border-border bg-card shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3.5 md:px-5">
                   <div>
-                    <h2 className="font-serif text-[17px] font-bold">Vendor geography</h2>
-                     <p className="mt-0.5 text-[11px] text-muted-foreground">Point locations shown against a county-level West Virginia map</p>
+                  <h2 className="font-serif text-[17px] font-bold">
+  West Virginia Retail Access
+</h2>
+<p className="mt-0.5 text-[11px] text-muted-foreground">
+  Explore Dollar General locations alongside the current WIC retail network
+</p>  
                   </div>
                  <div className="flex items-center gap-1 rounded-sm border border-border bg-muted/50 p-1">
   <button
@@ -376,29 +420,7 @@ const point =
               <SelectedPanel vendor={selected} onClear={() => setSelectedId('')} />
             </section>
 
-            <section className="grid gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,.8fr)]">
-               <div className="relative overflow-hidden border border-border bg-card p-5 md:p-6">
-                 <img src={wicEmbellishmentOne} alt="" aria-hidden="true" className="pointer-events-none absolute -right-10 -top-4 w-[230px] opacity-[.11]" />
-                 <img src={wicEmbellishmentTwo} alt="" aria-hidden="true" className="pointer-events-none absolute -bottom-14 right-24 w-[190px] opacity-[.07]" />
-                <div className="flex items-start justify-between gap-4">
-                   <div className="relative z-[1]"><p className="font-mono text-[9px] uppercase tracking-[.18em] text-accent-foreground/70">Reading the map</p><h2 className="mt-2 max-w-[550px] font-serif text-[24px] font-bold leading-[1.1] tracking-tight md:text-[29px]">Access is a distance problem before it is a store problem.</h2></div>
-                  <CircleHelp size={19} className="shrink-0 text-muted-foreground" />
-                </div>
-                 <p className="relative z-[1] mt-4 max-w-[720px] text-[13px] leading-relaxed text-muted-foreground">In rural West Virginia, a vendor can be physically present and still be functionally out of reach. This working map layers vendor type, rurality, and WIC authorization to surface where a familiar retail footprint may represent a practical partnership opportunity.</p>
-                 <div className="relative z-[1] mt-6 grid gap-4 border-t border-border pt-5 sm:grid-cols-3">
-                  <StoryStat value="11" label="rural counties represented" detail="in this working set" />
-                  <StoryStat value="18.4 mi" label="longest observed trip" detail="to a mapped vendor" />
-                  <StoryStat value="5" label="locations to validate" detail="before outreach" />
-                </div>
-              </div>
-               <div className="relative overflow-hidden border border-border bg-[#e8e5d5] p-5 md:p-6">
-                 <div className="flex items-center justify-between"><div className="flex items-center gap-2"><img src={wicColorLogo} alt="WIC" className="h-7 w-7 rounded-full object-cover" /><p className="font-mono text-[9px] uppercase tracking-[.18em] text-muted-foreground">Signal to watch</p></div><BarChart3 size={17} className="text-primary" /></div>
-                <p className="mt-6 font-serif text-[39px] font-bold leading-none text-primary">4 in 10</p>
-                <p className="mt-2 text-[13px] font-semibold text-foreground">mapped sites sit in a WIC opportunity window</p>
-                <div className="mt-5 h-2 overflow-hidden bg-background/70"><div className="h-full bg-accent transition-all duration-500" style={{ width: `${(gapCount / Math.max(vendors.length, 1)) * 100}%` }} /></div>
-                 <div className="mt-3 flex items-end justify-between gap-3"><p className="text-[11px] leading-relaxed text-muted-foreground">Not authorized or authorization status not yet confirmed. Treat this as a lead list, not a compliance finding.</p><img src={wicColorLogoAlt} alt="WIC" className="h-8 w-8 shrink-0 rounded-full object-cover" /></div>
-              </div>
-            </section>
+           
 
             <section id="location-index" className="border border-border bg-card">
               <div className="flex flex-col gap-4 border-b border-border p-4 md:flex-row md:items-center md:justify-between md:px-5">
