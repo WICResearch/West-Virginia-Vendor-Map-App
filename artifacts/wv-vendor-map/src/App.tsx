@@ -514,7 +514,17 @@ const point =
               <SelectedPanel vendor={selected} onClear={() => setSelectedId('')} />
             </section>
 
-           
+           <section className="border border-border bg-card px-5 py-5 shadow-sm">
+  <div>
+    <p className="font-mono text-[10px] uppercase tracking-[.16em] text-muted-foreground">
+      Why Dollar General?
+    </p>
+
+    <h2 className="mt-2 font-serif text-[22px] font-bold">
+      An existing retail footprint positioned where WIC access is limited
+    </h2>
+  </div>
+</section>
 
             <section id="location-index" className="border border-border bg-card">
               <div className="flex flex-col gap-4 border-b border-border p-4 md:flex-row md:items-center md:justify-between md:px-5">
