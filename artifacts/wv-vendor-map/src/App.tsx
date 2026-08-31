@@ -642,7 +642,19 @@ function SelectedPanel({
                 label="Pilot tier"
                 value={vendor.pilotTier || 'Not assigned'}
               />
+<ProfileRow
+  label="Recommended for pilot"
+  value={vendor.recommendedForPilot || 'Not assessed'}
+/>
 
+<ProfileRow
+  label="Pilot priority score"
+  value={
+    vendor.pilotPriorityScore != null
+      ? vendor.pilotPriorityScore.toFixed(1)
+      : '—'
+  }
+/>
               <ProfileRow
                 label="Priority rank"
                 value={
