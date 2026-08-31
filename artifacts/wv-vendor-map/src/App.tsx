@@ -524,7 +524,8 @@ const point =
       An existing retail footprint positioned where WIC access is limited
     </h2>
   </div>
-         <div className="mt-5 border-l-4 border-accent bg-muted/30 px-5 py-4">
+        <div className="mt-5 grid gap-3 md:grid-cols-3">     
+       <div className="border-l-4 border-accent bg-muted/30 px-5 py-4">
     <p className="font-mono text-[9px] uppercase tracking-[.14em] text-muted-foreground">
       Existing Footprint
     </p>
@@ -568,7 +569,8 @@ const point =
       vendor, including 32 identified communities with 10+ mile WIC retail
       access gaps.
     </p>
-  </div>        
+  </div> 
+  </div>
 </section>
 
             <section id="location-index" className="border border-border bg-card">
