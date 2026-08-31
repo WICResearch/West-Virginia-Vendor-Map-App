@@ -425,7 +425,14 @@ const point =
       }
     : basePoint;      
                        return <g key={vendor.id} className="vendor-pin" onClick={() => setSelectedId(vendor.id)} data-testid={`map-pin-${vendor.id}`} role="button" aria-label={`Select ${vendor.name}`} tabIndex={0}>
-          {isAccessGap && (
+<circle
+  cx={point.x}
+  cy={point.y}
+  r="12"
+  fill="transparent"
+  pointerEvents="all"
+/>
+                         {isAccessGap && (
   <circle
     cx={point.x}
     cy={point.y}
