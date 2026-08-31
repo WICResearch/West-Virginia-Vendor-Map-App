@@ -553,7 +553,22 @@ const point =
       authorized, demonstrating an existing foundation for serving households
       participating in federal nutrition-assistance programs.
     </p>
-  </div>          
+  </div> 
+       <div className="mt-3 border-l-4 border-[#d96b52] bg-muted/30 px-5 py-4">
+    <p className="font-mono text-[9px] uppercase tracking-[.14em] text-muted-foreground">
+      Existing Community Reach
+    </p>
+
+    <p className="mt-2 font-serif text-[24px] font-bold">
+      118 stores in ZIPs without WIC
+    </p>
+
+    <p className="mt-2 max-w-2xl text-[11px] leading-relaxed text-muted-foreground">
+      Dollar General already operates in 110 ZIP codes without a current WIC
+      vendor, including 32 identified communities with 10+ mile WIC retail
+      access gaps.
+    </p>
+  </div>        
 </section>
 
             <section id="location-index" className="border border-border bg-card">
